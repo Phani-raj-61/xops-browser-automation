@@ -1,0 +1,1 @@
+sudo docker run --rm -it --gpus all --name vllm-provider --ipc=host -p 8000:8000 -v ~/.cache/huggingface:/root/.cache/huggingface vllm/vllm-openai:latest --model Qwen/Qwen2.5-7B-Instruct-AWQ --quantization awq --gpu-memory-utilization 0.85 --max-model-len 32768
