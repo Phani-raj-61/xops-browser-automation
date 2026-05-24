@@ -20,7 +20,9 @@ If you don't have `uv` installed yet, run the appropriate command for your syste
 * **macOS / Linux:**
 ```bash
   curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | sh
+```
 
 * **Windows (PowerShell):**
 ```powershell
   powershell -c "irm [https://astral.sh/uv/install.ps1](https://astral.sh/uv/install.ps1) | iex"
+```
