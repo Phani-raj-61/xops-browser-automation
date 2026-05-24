@@ -26,3 +26,15 @@ If you don't have `uv` installed yet, run the appropriate command for your syste
 ```powershell
   powershell -c "irm [https://astral.sh/uv/install.ps1](https://astral.sh/uv/install.ps1) | iex"
 ```
+
+## 🚀 Setup & Installation
+
+Follow these step-by-step instructions to clone the repository, initialize your isolated environment, and fetch the required dependencies.
+
+### Step 1: Clone the Repository
+Open your terminal (or PowerShell on Windows) and run the following commands to pull the project code:
+
+```bash
+git clone [https://github.com/Phani-Raj-Goud/xops-browser-automation.git](https://github.com/Phani-Raj-Goud/xops-browser-automation.git)
+cd xops-browser-automation
+```
