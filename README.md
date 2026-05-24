@@ -45,3 +45,9 @@ With `uv`, you don't need to manually create virtual environment folders. The `s
 ```bash
 uv sync
 ```
+
+### Step 3: Install Browser Binaries (Playwright)
+Because this is a browser automation project, you must download the necessary browser binaries (Chromium, Firefox, WebKit) inside your environment context before execution:
+
+```bash
+uv run playwright install
