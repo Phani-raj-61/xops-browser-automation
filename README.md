@@ -57,8 +57,8 @@ uv run playwright install
 
 The primary entry point for this automation workflow is `one_shot_llm.py`.
 
-### Method 1: The Modern Way (No Activation Needed)
-The cleanest way to execute your code is via `uv run`. This securely targets your project's isolated environment dependencies without altering your terminal's shell state, meaning you don't have to deal with manually activating or deactivating environments[cite: 1]:
+### Method 1: The Modern Way
+The cleanest way to execute your code is via `uv run`. This securely targets your project's isolated environment dependencies without altering your terminal's shell state, meaning you don't have to deal with manually activating or deactivating environments:
 
 * **Windows (PowerShell / CMD) & macOS / Linux:**
 ```bash
