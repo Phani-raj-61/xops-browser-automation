@@ -44,22 +44,22 @@ chat_response = client.chat.completions.create(
 )
 print(chat_response.choices[0].message.content)
 
-# with sync_playwright() as p:
-#     browser = p.chromium.launch(headless=False, slow_mo=1000)
-#     context = browser.new_context()
-#     page = context.new_page()
-#     print(f"Navigating to {url}...")
-#     page.goto(url)
-#     llm_output = chat_response.choices[0].message.content
-#     print(llm_output)
-#     for function in llm_output.split(';'):
-#         function = function.strip()
-#         if function == "":
-#             continue
-#         parts = function.strip().split('(', 1)
-#         if parts[0] == 'login':
-#             eval(parts[0] +'(page, email, password' + parts[1])
-#         elif parts[0] == 'select_filters' or parts[0] == 'search_controls':
-#             eval(parts[0] +'(url, page, ' + parts[1])
-#         else:
-#             eval(parts[0] +'(url, page' + parts[1])
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False, slow_mo=1000)
+    context = browser.new_context()
+    page = context.new_page()
+    print(f"Navigating to {url}...")
+    page.goto(url)
+    llm_output = chat_response.choices[0].message.content
+    print(llm_output)
+    for function in llm_output.split(';'):
+        function = function.strip()
+        if function == "":
+            continue
+        parts = function.strip().split('(', 1)
+        if parts[0] == 'login':
+            eval(parts[0] +'(page, email, password' + parts[1])
+        elif parts[0] == 'select_filters' or parts[0] == 'search_controls':
+            eval(parts[0] +'(url, page, ' + parts[1])
+        else:
+            eval(parts[0] +'(url, page' + parts[1])
