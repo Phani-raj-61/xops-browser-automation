@@ -38,3 +38,10 @@ Open your terminal (or PowerShell on Windows) and run the following commands to 
 git clone [https://github.com/Phani-Raj-Goud/xops-browser-automation.git](https://github.com/Phani-Raj-Goud/xops-browser-automation.git)
 cd xops-browser-automation
 ```
+
+### Step 2: Create Environment & Sync Dependencies
+With `uv`, you don't need to manually create virtual environment folders. The `sync` command reads the project configuration, automatically builds a local `.venv` folder, and installs all required packages deterministically:
+
+```bash
+uv sync
+```
