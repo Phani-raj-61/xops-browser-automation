@@ -10,12 +10,18 @@ def login(page, email, password):
     # Perform login
     page.fill("#emailAddress", email)
     page.fill("#password", password)
-    page.get_by_role("button", name="Login").click()
+    button = page.get_by_role("button", name="Login")
+    button.click()
 
     # Polling Logic
     target_path = "/home/overview"
     max_attempts = 30  # 30 seconds total
     logged_in = False
+    while page.get_by_text("reCAPTCHA not ready. Please try again.", exact=True).count() > 0:
+        print("Captcha Error Detected: Waiting 500ms before clicking...")
+        page.wait_for_timeout(500)
+        button.click()
+        
 
     for attempt in range(1, max_attempts + 1):
         current_url = page.url
@@ -47,11 +53,12 @@ def login_with_polling(url, email, password):
         page.goto(url)
 
         login(page, email, password)
-        select_filters(url, page, {"Severity": ["Critical"],
-                                    "Status": ["Non-Compliant"]},
-                                    frameworks=['CIS'])
-        last_compare(url, page)
-        download(url, page)
+        page.wait_for_timeout(30000)
+        # select_filters(url, page, {"Severity": ["Critical"],
+        #                             "Status": ["Non-Compliant"]},
+        #                             frameworks=['CIS'])
+        # last_compare(url, page)
+        # download(url, page)
         # print(get_recommendations_plan(url, page))
         # total, avg = get_current_month(url, page)
         # percentage, total_change = get_last_month(url, page)
