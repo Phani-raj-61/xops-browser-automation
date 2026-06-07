@@ -1,7 +1,14 @@
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
+from login_script import login
+from cloudops import go_to_cloudops, run_cloudops_scan
+# from dashboard_extractor import extract_dashboard_data
+from dotenv import load_dotenv
+import os
 
-def get_dom_visible(url):
+load_dotenv()
+
+def test(url, email, password):
     with sync_playwright() as p:
         # headless=False: Opens a physical browser window
         # slow_mo=1000: Delays actions by 1 second so you can follow along
@@ -11,34 +18,24 @@ def get_dom_visible(url):
         
         print(f"Navigating to {url}...")
         page.goto(url)
+        login(page, email, password)
+        go_to_cloudops(url, page)
+        run_cloudops_scan(url, page)
+        # page.wait_for_timeout(20000)
+        # print(extract_dashboard_data(page))
+        # go_to_compliance_scan(url, page)
+        # click_scan_and_wait(page)
+        # should_update, dates, dropdown_buttons = update_dates(url, page)
+        # print(should_update)
+        # print(dates)
         
-        # Taking a screenshot is a great way to verify what you're seeing
-        page.screenshot(path="debug_view.png")
-        
-        # Get the DOM
-        dom = page.content()
-        
-        print("DOM captured successfully.")
         
         # Keep the browser open for a few seconds if you want to inspect it manually
         # import time; time.sleep(5) 
         
         browser.close()
-        return dom
-
-def clean_dom(raw_html):
-    soup = BeautifulSoup(raw_html, "html.parser")
-    
-    # Remove script and style elements
-    for script_or_style in soup(["script", "style", "header", "footer", "nav", "noscript"]):
-        script_or_style.extract()
-
-    # Get text, but preserve some structure
-    # You can also use soup.get_text() for pure text
-    return str(soup.body) # Returns cleaned HTML body
 
 if __name__ == "__main__":
-    url_to_scrape = "https://demo.xops360.ai/"
-    print(clean_dom(url_to_scrape))
-    html_content = get_dom_visible(url_to_scrape)
+    LOGIN_URL = "https://demo.xops360.ai/"
+    test(LOGIN_URL, os.getenv('USER_NAME'), os.getenv('PASSWORD'))
     # print(html_content) # Uncomment to see the full HTML in your terminal

@@ -1,9 +1,0 @@
-These are the list of functions that have been implemented:
-login() - This is a function to login to the website, it is called before navigating anywhere in the website
-go_to_compliance_scan() - Changes the url of the website to redirect to its SecOps Compliance scan page.
-
-These are the list of functions that are callable while in the SecOps compliance scan page:
-search_controls(text: str) - Fills a text box with the given text to only show elememts with the text in the results
-last_compare() - Selects the last two days to compare and display the scan results
-select_filters(filter_dicts, frameworks) - Selects the filters to show the results, its input variable filter_dicts is a dictonary with the possible key values 'Severity' and 'Status'. Each dictory item is a list that can contain a certain number of strings. For 'Severity' the possible values in the list are 'Critical', 'High', 'Medium' and 'Low'. For 'Staus' the possible values in the list are 'Compliant', 'Non-Compliant', 'Remediated' and 'In Progress'. The variable frameworks is optional and is by default set to 'All' and can accept a list containing the following values 'CIS', 'GDPR', 'SOC2' and 'PCI-DSS'. Lists can't have duplicate values. Eg: select_filters({"Severity": ["Critical"], "Status": ["Non-Compliant"]}, frameworks=['CIS'])
-download() - Downloads the selected result for the given filters, controls and comparisons.

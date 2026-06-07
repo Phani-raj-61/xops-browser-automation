@@ -9,6 +9,11 @@ wheels/
 # Virtual environments
 .venv
 .env
+.playwright-mcp
 *.png
+*.docx
 downloads/
 videos/
+*.pem
+.agents/
+*.pkl

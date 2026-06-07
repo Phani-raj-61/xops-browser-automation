@@ -46,22 +46,34 @@ def wait_till_page_load(page):
 def get_current_month(base_url, page):
     go_to_finsops(base_url, page)
     target_element = page.get_by_text("Current Month", exact=True).locator("xpath=../..")
-    return target_element.inner_text().splitlines()[1:]
+    data = target_element.inner_text().splitlines()
+    print(data[0] +": " +data[1])
+    print(data[2])
+    return data[1:]
 
 def get_last_month(base_url, page):
     go_to_finsops(base_url, page)
     target_element = page.get_by_text("vs Last Month", exact=True).locator("xpath=../..")
-    return target_element.inner_text().splitlines()[1:]
+    data = target_element.inner_text().splitlines()
+    print(data[0] +": " +data[1])
+    print(data[2])
+    return data[1:]
 
 def get_potential_yearly_savings(base_url, page):
     go_to_finsops(base_url, page)
     target_element = page.get_by_text("Potential Yearly Savings", exact=True).first.locator("xpath=../..")
-    return target_element.inner_text().splitlines()[1:]
+    data = target_element.inner_text().splitlines()
+    print(data[0] +": " +data[1])
+    print(data[2])
+    return data[1:]
 
 def get_budget_status(base_url, page):
     go_to_finsops(base_url, page)
     target_element = page.get_by_text("Budget Status", exact=True).locator("xpath=../..")
-    return target_element.inner_text().splitlines()[1:]
+    data = target_element.inner_text().splitlines()
+    print(data[0] +": " +data[1])
+    print(data[2])
+    return data[1:]
 
 def get_savings_plan_data(base_url, page):
     go_to_finsops(base_url, page)
@@ -70,6 +82,10 @@ def get_savings_plan_data(base_url, page):
     coverage = target_element.get_by_text("Coverage", exact=True).locator("xpath=..").inner_text().splitlines()[1]
     potential_yearly_savings = target_element.get_by_text("Potential Yearly Savings", exact=True).locator("xpath=..").inner_text().splitlines()[1]
     total_commitment = target_element.get_by_text("Total Commitment", exact=True).locator("xpath=..").inner_text().splitlines()[1]
+    print("Active plans: " + active_plans)
+    print("Coverage: " + coverage)
+    print("Potential Yearly Savings: " + potential_yearly_savings)
+    print("Total Commitment: " + total_commitment)
     return active_plans, coverage, potential_yearly_savings, total_commitment
 
 def get_recommendations_plan(base_url, page):
@@ -79,6 +95,10 @@ def get_recommendations_plan(base_url, page):
     estimated_monthly_spend = target_element.get_by_text("Estimated Monthly Spend", exact=True).locator("xpath=..").inner_text().splitlines()[1]
     estimated_monthly_savings = target_element.get_by_text("Estimated Monthly Savings", exact=True).locator("xpath=..").inner_text().splitlines()[1]
     estimated_savings_percentage = target_element.get_by_text("Estimated Savings Percentage", exact=True).locator("xpath=..").inner_text().splitlines()[1]
+    print("Current Monthly on Demand Spend: " + current_monthly_on_demnad_spend)
+    print("Estimated Monthly Spend: " + estimated_monthly_spend)
+    print("Estimated Monthly Savings: " + estimated_monthly_savings)
+    print("Estimated Savings Percentage: "+ estimated_savings_percentage)
     return current_monthly_on_demnad_spend, estimated_monthly_spend, estimated_monthly_savings, estimated_savings_percentage
 
     

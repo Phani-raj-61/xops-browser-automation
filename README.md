@@ -1,9 +1,5 @@
 # 🌐 xops-browser-automation
 
-[![Built with: uv](https://img.shields.io/badge/built%20with-uv-ccc.svg?style=flat-skin&color=A512BB)](https://github.com/astral-sh/uv)
-[![Python: 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 A modern, high-performance Python browser automation platform driven by LLM decision-making, managed seamlessly with `uv`.
 
 ---
@@ -11,7 +7,7 @@ A modern, high-performance Python browser automation platform driven by LLM deci
 ## 📋 Prerequisites
 
 Before setting up the project, ensure you have the following installed on your host system:
-* **Python 3.10 or higher**
+* **Python 3.11 or higher**
 * **uv** (Recommended) — Astral's lightning-fast Python package resolver.
 
 ### Install `uv` (Fastest Setup)
@@ -46,7 +42,14 @@ With `uv`, you don't need to manually create virtual environment folders. The `s
 uv sync
 ```
 
-### Step 3: Install Browser Binaries (Playwright)
+### Step 3: Create `.env` file to store `USER_NAME` and `PASSWORD` for site access
+In order to login to the site using a specific user name and password create a new file named `.env` and write the following:
+```bash
+USER_NAME = <site_access_user_name>
+PASSWORD = <site_access_password>
+```
+
+### Step 4: Install Browser Binaries (Playwright)
 Because this is a browser automation project, you must download the necessary browser binaries (Chromium, Firefox, WebKit) inside your environment context before execution:
 
 ```bash

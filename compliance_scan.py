@@ -1,6 +1,8 @@
+from pydantic import config
 from playwright.sync_api import sync_playwright
-import os
 from pathlib import Path
+import config
+import pickle
 
 def go_to_compliance_scan(base_url, page):
     base_url = base_url.rstrip('/')
@@ -78,13 +80,7 @@ def click_status_button_text_only(page, section_label, button_text):
     except Exception as e:
         print(f"Text-based lookup failed: {e}")
 
-
-def extract_history_dates(page):
-    """
-    Extracts all dates and timestamps from the history dropdown.
-    """
-    history_data = []
-
+def get_history_dropdown_buttons(page):
     # 1. Locate the dropdown container (the absolute div)
     # Using the 'z-50' or 'top-full' classes helps identify the floating menu
     dropdown_container = page.locator("div.absolute.z-50")
@@ -92,6 +88,15 @@ def extract_history_dates(page):
     # 2. Find all buttons inside this dropdown
     # We use .all() to get a list of locators we can iterate over
     dropdown_buttons = dropdown_container.get_by_role("button").all()
+    return dropdown_buttons
+
+def extract_history_dates(page):
+    """
+    Extracts all dates and timestamps from the history dropdown.
+    """
+    history_data = []
+
+    dropdown_buttons = get_history_dropdown_buttons(page)
 
     print(f"Found {len(dropdown_buttons)} history entries.")
 
@@ -115,13 +120,67 @@ def get_history(base_url, page):
     Locates the history container by its label and clicks the dynamic button beside it.
     """
     go_to_compliance_scan(base_url, page)
-    page.locator("div:has(> span:text('History')) + div button").click()
+    if not config.SEC_OPS_HISTORY_CLICKED:
+        config.SEC_OPS_HISTORY_CLICKED = True
+        page.locator("div:has(> span:text('History')) + div button").click()
     return extract_history_dates(page)
 
+def update_dates(base_url, page):
+    history_data, _ = get_history(base_url, page)
+    file_path = Path("sec_ops_dates.pkl")
+    should_update = False
+    if file_path.is_file():
+        with open(file_path, "rb") as f:
+            prev_data = pickle.load(f)
+            if prev_data != history_data:
+                should_update = True
+    else:
+        should_update = True
+    if should_update:
+        with open(file_path, "wb") as file:
+            pickle.dump(history_data, file)
+    return should_update
+
+
 def select_history(base_url, page, idx = -1):
-    go_to_compliance_scan(base_url, page)
-    _, date_buttons = get_history(base_url, page)
+    # go_to_compliance_scan(base_url, page)
+    # page.locator("div:has(> span:text('History')) + div button").click()
+    if update_dates(base_url, page):
+        print("In select history", config.SEC_OPS_HISTORY_CLICKED)
+        return False
+    date_buttons = get_history_dropdown_buttons(page)
     date_buttons[idx].click()
+    config.SEC_OPS_HISTORY_CLICKED = False
+    return True
+
+def compare_dates(base_url, page, date1_idx, date2_idx):
+    if update_dates(base_url, page):
+        print("In select history", config.SEC_OPS_HISTORY_CLICKED)
+        return False
+    if date1_idx == date2_idx:
+        print("Error: cannot perform date comparison.")
+        return True
+    select_history(base_url, page, date1_idx)
+    compare_button = page.get_by_role("button", name="Compare")
+    compare_button.click()
+
+    vs_container = page.locator("div.border-blue-500\\/30").filter(
+        has=page.get_by_text("vs.", exact=True)
+    )
+
+    target_button = vs_container.get_by_role("button")
+    target_button.click()
+    dropdown_container = vs_container.locator("div.absolute.z-50")
+    dropdown_buttons = dropdown_container.get_by_role("button").all()
+    if date2_idx < date1_idx:
+        dropdown_buttons[date2_idx].click()
+    else:
+        print(date2_idx - 1)
+        dropdown_buttons[date2_idx - 1].click()
+    return True
+
+
+
     
 
 def last_compare(base_url, page):
@@ -138,6 +197,7 @@ def last_compare(base_url, page):
 
     target_button = vs_container.get_by_role("button")
     target_button.click()
+
     dropdown_container = vs_container.locator("div.absolute.z-50")
     dropdown_buttons = dropdown_container.get_by_role("button").all()
     print(f"Found {len(dropdown_buttons)} history entries.")
